@@ -31,55 +31,128 @@
                         incorrect answer, the timer will decrease by 10 seconds. Good Luck!
                     </div>
                 </div>
-                <br>
-                <div>
-                    <button onClick="startQuiz" type="button" class="btn btn-primary btn-lg">Start</button>
-                </div>
-                <br>
-                <div>
-                    <h1>Timer:</h1>
-                    <h1 id="countdown"></h1>
-                </div>
-                <div class="card text-dark bg-light">
-                    <div class="card-header">
-                        <h3>Questions</h1>
-                    </div>
-                    <form id="questions" class="card-body">
-                        <!-- inputs questions -->
-                    </form>
-                </div>
             </div>
+        </div>
+        <br>
+        <div>
+            <button onClick="start(event)" type="button" class="btn btn-primary btn-lg">Start</button>
+            <button onClick="window.location.reload()" type="button" class="btn btn-primary btn-lg">Reset</button>
+        </div>
+        <br>
+        <div>
+            <h1>Timer:</h1>
+            <h1 id="countdown"></h1>
+        </div>
+        <div id="quizPage" class="card text-dark bg-light">
+            <form id="inputQuestion" class="card-body">
+                <!-- inputs questions -->
+            </form>
+        </div>
+        <div id="scorePage" class="card d-none">
+            <div class="card-body">Score Board</div>
+            
+
         </div>
     </div>
     </div>
 
     <script>
-        var timer
-        var timerValue
+        var countdownTimer
+        var countdownValue
         var mcNum
-        var mc = [
-            { question: "When was the iPhone first released", answer: ["2005", "2006", "2007", "2008"], correct: "2007" },
-            { question: "Fe is the chemical symbol for…", answer: ["Zinc", "Hydrogen", "Fluorine", "Iron"], correct: "Iron" },
-            { question: "How many rings are there in the Olympic Symbol", answer: ["5", "6", "7", "8"], correct: "5" },
-            { question: "What does the “U” stand for in “UFO”?", answer: ["Unidentified", "Under", "United", "Unique"], correct: "Unidentified" },
-            { question: "How many degrees are in a circle", answer: ["185", "235", "360", "720"], correct: "360" },
-            { question: "What is the longest river in the world", answer: ["Amazon", "Congo", "Nile", "Hudson"], correct: "Nile" },
+
+        var mcBank = [
+            { question: "When was the iPhone first released", 
+            answers: ["2005", "2006", "2007", "2008"], 
+            correct: "2007" },
+            { question: "Fe is the chemical symbol for…", 
+            answers: ["Zinc", "Hydrogen", "Fluorine", "Iron"], 
+            correct: "Iron" },
+            { question: "How many rings are there in the Olympic Symbol", 
+            answers: ["5", "6", "7", "8"], 
+            correct: "5" },
+            { question: "What does the “U” stand for in “UFO”?", 
+            answers: ["Unidentified", "Under", "United", "Unique"], 
+            correct: "Unidentified" },
+            { question: "How many degrees are in a circle", 
+            answers: ["185", "235", "360", "720"], 
+            correct: "360" },
+            { question: "What is the longest river in the world", 
+            answers: ["Amazon", "Congo", "Nile", "Hudson"], 
+            correct: "Nile" },
         ]
         function startQuiz() {
             mcNum = 0
             countdownValue = 60
-            countdownTimer = setInterval(decreaseTimer, 1000)
-            frontPage()
+            countdownTimer = setInterval(timeReduction, 1000)
+            typePage("quizPage")
+            nextMC()
         }
 
-        function frontPage(page) {
+        function typePage(page) {
             document.querySelector('#quizPage').classList.add('d-none')
             document.querySelector('#scorePage').classList.add('d-none')
             document.querySelector(`#${page}`).classList.remove('d-none')
         }
 
         function nextMC() {
-            var question = mc
+            var question = mcBank[mcNum]
+            var questionEl = document.querySelector("#inputQuestion")
+            questionEl.innerHTML = `<div class="alert alert-warning"><h3>${question.question}</h3>`
+
+            for (var i = 0; i < question.answers.length; i++) {
+                var ans = question.answers[i]
+                questionEl.innerHTML += `
+                <button onClick="pickAnswer(event,'${ans}')" class="btn btn-secondary btn-block">${ans}</button>`
+            }
+        }
+
+        function pickAnswer(event, ans) {
+            event.preventDefault()
+            console.log(`The Answer you picked is: ${ans}`)
+            if (ans === mcBank[mcNum].correct) {
+                console.log("Good Job!")
+            }
+            else {
+                console.log("Wrong answer")
+                timeReduction(10)
+            }
+            mcNum++
+            if (mcNum < mcBank.length) {
+                nextMC()
+            }
+            else {
+                finishQuiz()
+            }
+        }
+
+        function timeReduction(value = 1) {
+            countdownValue -= value
+            document.querySelector('#countdown').textContent = countdownValue
+            if (countdownValue < 1) {
+                document.querySelector('#countdown').textContent = 0
+                finishQuiz()
+            }
+        }
+
+        function nextQuestion(page) {
+            document.querySelector("#quizPage").classList.add("d-none")
+            document.querySelector("scorePage").classList.add("d-none")
+            document.querySelector(`#${page}`).classList.remove("d-none")
+        }
+
+        function finishQuiz(event) {
+            if (event)
+            event.preventDefault()
+            console.log("Finished")
+            clearInterval(countdownTimer)
+            typePage("scorePage")
+
+        }
+        function start(event){
+            event.preventDefault()
+            clearInterval(countdownTimer)
+            startQuiz()
         }
     </script>
 </body>
