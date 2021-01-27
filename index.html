@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <title>Multiple Choice Quiz</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to the Multiple Choice Quiz</h1>
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Instructions
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        Start the quiz by clicking the Start Button. Once the button is clicked, a timer will appear and
+                        you will have a set amount of time to answer all of the questions. Every time you answer an
+                        incorrect answer, the timer will decrease by 10 seconds. Good Luck!
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <button onClick="startQuiz" type="button" class="btn btn-primary btn-lg">Start</button>
+                </div>
+                <br>
+                <div>
+                    <h1>Timer:</h1>
+                    <h1 id="countdown"></h1>
+                </div>
+                <div class="card text-dark bg-light">
+                    <div class="card-header">
+                        <h3>Questions</h1>
+                    </div>
+                    <form id="questions" class="card-body">
+                        <!-- inputs questions -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        var timer
+        var timerValue
+        var mcNum
+        var mc = [
+            { question: "When was the iPhone first released", answer: ["2005", "2006", "2007", "2008"], correct: "2007" },
+            { question: "Fe is the chemical symbol for…", answer: ["Zinc", "Hydrogen", "Fluorine", "Iron"], correct: "Iron" },
+            { question: "How many rings are there in the Olympic Symbol", answer: ["5", "6", "7", "8"], correct: "5" },
+            { question: "What does the “U” stand for in “UFO”?", answer: ["Unidentified", "Under", "United", "Unique"], correct: "Unidentified" },
+            { question: "How many degrees are in a circle", answer: ["185", "235", "360", "720"], correct: "360" },
+            { question: "What is the longest river in the world", answer: ["Amazon", "Congo", "Nile", "Hudson"], correct: "Nile" },
+        ]
+        function startQuiz() {
+            mcNum = 0
+            countdownValue = 60
+            countdownTimer = setInterval(decreaseTimer, 1000)
+            frontPage()
+        }
+
+        function frontPage(page) {
+            document.querySelector('#quizPage').classList.add('d-none')
+            document.querySelector('#scorePage').classList.add('d-none')
+            document.querySelector(`#${page}`).classList.remove('d-none')
+        }
+
+        function nextMC() {
+            var question = mc
+        }
+    </script>
+</body>
+
+</html>
