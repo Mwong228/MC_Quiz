@@ -49,9 +49,7 @@
             </form>
         </div>
         <div id="scorePage" class="card d-none">
-            <div class="card-body">Score Board</div>
-            
-
+            <div class="card-body"></div>
         </div>
     </div>
     </div>
@@ -60,6 +58,8 @@
         var countdownTimer
         var countdownValue
         var mcNum
+        var score=0 
+        var highscore 
 
         var mcBank = [
             { question: "When was the iPhone first released", 
@@ -112,6 +112,8 @@
             console.log(`The Answer you picked is: ${ans}`)
             if (ans === mcBank[mcNum].correct) {
                 console.log("Good Job!")
+                score++
+                console.log(score)
             }
             else {
                 console.log("Wrong answer")
@@ -147,12 +149,38 @@
             console.log("Finished")
             clearInterval(countdownTimer)
             typePage("scorePage")
+            scorePage()
 
         }
         function start(event){
             event.preventDefault()
             clearInterval(countdownTimer)
             startQuiz()
+        }
+
+        function scorePage(){
+            var name = window.prompt("Enter Name")
+            if (name.length < 1){
+                alert("Please enter a name")
+                scorePage()
+            }
+            else {
+                name = localStorage.setItem("user", name)
+
+                console.log(score)
+                document.querySelector("#scorePage").innerHTML += `<h3>Score Page</h3>`
+                document.querySelector("#scorePage").innerHTML += localStorage.getItem("user")
+                
+                highScore = document.querySelector("#scorePage")
+                highScore.innerHTML += `<div>${name}${score} out of 5 right!</div>`
+                document.querySelector("#scorePage").innerHTML += `<button onClick="clearScore(event)" class="btn btn-primary">Clear High Score</button>`
+            }
+        }
+
+        function clearScore(event){
+            event.preventDefault()
+            document.querySelector("#scorePage").innerHTML = ""
+            localStorage.clear()
         }
     </script>
 </body>
