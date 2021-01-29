@@ -36,7 +36,6 @@
         <br>
         <div>
             <button onClick="start(event)" type="button" class="btn btn-primary btn-lg">Start</button>
-            <button onClick="window.location.reload()" type="button" class="btn btn-primary btn-lg">Reset</button>
         </div>
         <br>
         <div>
@@ -50,6 +49,9 @@
         </div>
         <div id="scorePage" class="card d-none">
             <div class="card-body"></div>
+            <h2>Score Page</h2>
+            <button onClick="clearScore(event)" class="btn btn-primary">Clear High Score</button>
+            
         </div>
     </div>
     </div>
@@ -138,6 +140,7 @@
         }
 
         function nextQuestion(page) {
+
             document.querySelector("#quizPage").classList.add("d-none")
             document.querySelector("scorePage").classList.add("d-none")
             document.querySelector(`#${page}`).classList.remove("d-none")
@@ -154,32 +157,36 @@
         }
         function start(event){
             event.preventDefault()
+            score = 0
             clearInterval(countdownTimer)
             startQuiz()
         }
 
         function scorePage(){
-            var name = window.prompt("Enter Name")
+            let name = window.prompt("Enter Name")
+            let finalScore = JSON.parse(localStorage.score || "[]" )
+            let newFinalScore = {name, score}
+            finalScore.push(newFinalScore)
+            localStorage.scores = JSON.stringify(finalScore)
+           
             if (name.length < 1){
                 alert("Please enter a name")
                 scorePage()
             }
+            //loops through to display all elements of array 
             else {
-                name = localStorage.setItem("user", name)
+                for (let i=0; i < finalScore.length; i++){
+                    console.log(`name:${finalScore[i].name} has a score of ${finalScore[i].score}`)
 
-                console.log(score)
-                document.querySelector("#scorePage").innerHTML += `<h3>Score Page</h3>`
-                document.querySelector("#scorePage").innerHTML += localStorage.getItem("user")
-                
-                highScore = document.querySelector("#scorePage")
-                highScore.innerHTML += `<div>${name}${score} out of 5 right!</div>`
-                document.querySelector("#scorePage").innerHTML += `<button onClick="clearScore(event)" class="btn btn-primary">Clear High Score</button>`
+                    document.querySelector("#scorePage").innerHTML += `<div><h5>${finalScore[i].name}: scored ${finalScore[i].score}/6</h5></div>`
+                    
+                }
             }
         }
-
+        //clears all local storage from page
         function clearScore(event){
             event.preventDefault()
-            document.querySelector("#scorePage").innerHTML = ""
+            document.querySelector("#scorePage").innerHTML = `<h3>Score Page</h3><button onClick="clearScore(event)" class="btn btn-primary">Clear High Score</button>`
             localStorage.clear()
         }
     </script>
